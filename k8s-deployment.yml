@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seismic-activity-analysis
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: seismic-activity-analysis
+  template:
+    metadata:
+      labels:
+        app: seismic-activity-analysis
+    spec:
+      containers:
+      - name: app
+        image: seismic-activity-analysis:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seismic-activity-analysis
+spec:
+  selector:
+    app: seismic-activity-analysis
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
