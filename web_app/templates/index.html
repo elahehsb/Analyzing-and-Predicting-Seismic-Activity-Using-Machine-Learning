@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seismic Activity Prediction</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+    <h1>Seismic Activity Prediction</h1>
+    <form id="prediction-form">
+        <label for="latitude">Latitude:</label>
+        <input type="number" id="latitude" step="0.01">
+        <br>
+        <label for="longitude">Longitude:</label>
+        <input type="number" id="longitude" step="0.01">
+        <br>
+        <label for="depth">Depth:</label>
+        <input type="number" id="depth" step="0.1">
+        <br>
+        <label for="magnitude">Magnitude:</label>
+        <input type="number" id="magnitude" step="0.1">
+        <br>
+        <button type="button" onclick="predictSeismicActivity()">Predict</button>
+    </form>
+    <h2>Significant Earthquake: <span id="significant-earthquake"></span></h2>
+
+    <script>
+        function predictSeismicActivity() {
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+            const depth = document.getElementById('depth').value;
+            const magnitude = document.getElementById('magnitude').value;
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ latitude, longitude, depth, magnitude }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('significant-earthquake').innerText = data.significant_earthquake ? 'Yes' : 'No';
+            });
+        }
+    </script>
+</body>
+</html>
